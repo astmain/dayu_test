@@ -60,7 +60,6 @@ model User {
   @@map("users")
 }
 
-
 model WechatInfo {
   id           Int      @id @default(autoincrement())
   accessToken  String   @map("access_token")
@@ -507,41 +506,40 @@ model Material {
 
 //  规格
 model Specification {
-  id        Int               @id @default(autoincrement())
-  name      String            @db.VarChar(50)
-  is_tag    Boolean           @default(false)
+  id     Int     @id @default(autoincrement())
+  name   String  @db.VarChar(50)
+  is_tag Boolean @default(false)
 
   // 删除 Specification 时，同时删除所有关联的 SpecList
-  list      SpecList[]
+  list SpecList[]
 
   // 自关联：children 被删除时不连带父级；父级被删除时，子级的 parentId 被设为 null
-  children  Specification[]   @relation("SpecificationChildren")
-  parentId  Int?              @map("parent_id")
-  parent    Specification?    @relation("SpecificationChildren", fields: [parentId], references: [id], onDelete: SetNull)
+  children Specification[] @relation("SpecificationChildren")
+  parentId Int?            @map("parent_id")
+  parent   Specification?  @relation("SpecificationChildren", fields: [parentId], references: [id], onDelete: SetNull)
 
-  createdAt DateTime          @default(now()) @map("created_at")
-  updatedAt DateTime          @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("specifications")
 }
 
 model SpecList {
-  id              Int             @id @default(autoincrement())
-  name            String          @db.VarChar(50)
-  price           Float          @default(1.00)
-  start_price     Float          @default(0.00)
-  is_default      Boolean         @default(false)
+  id          Int     @id @default(autoincrement())
+  name        String  @db.VarChar(50)
+  price       Float   @default(1.00)
+  start_price Float   @default(0.00)
+  is_default  Boolean @default(false)
 
   // 规范的外键定义：当 Specification 被删除，列表被级联删除
   specificationId Int
-  specification   Specification   @relation(fields: [specificationId], references: [id], onDelete: Cascade)
+  specification   Specification @relation(fields: [specificationId], references: [id], onDelete: Cascade)
 
-  createdAt       DateTime        @default(now()) @map("created_at")
-  updatedAt       DateTime        @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("speclists")
 }
-
 
 model HoleImg {
   id           Int      @id @default(autoincrement())
@@ -583,23 +581,23 @@ model Attachment {
 //  购物车
 model Cart {
   id         Int      @id @default(autoincrement())
-  userId     Int      @map("user_id")  //  别名
+  userId     Int      @map("user_id") //  别名
   user       User     @relation(fields: [userId], references: [id])
   fileInfoId Int      @map("file_info_id")
   fileInfo   FileInfo @relation(fields: [fileInfoId], references: [id])
   count      Int      @default(0)
 
-// 单独存储 方便价格计算  避免反复关联外表查询
-  volume Float @default(0.00)
-  surface Float @default(0.00)
+  // 单独存储 方便价格计算  避免反复关联外表查询
+  volume               Float  @default(0.00)
+  surface              Float  @default(0.00)
   //  材料  信息  回显
   material_id          Int
   material_name        String
-  material_density Float  @default(0.00)
+  material_density     Float  @default(0.00)
   material_unit_price  Float  @default(0.00)
   material_start_price Float  @default(0.00)
   //  上面为 复刻材料信息    下面为基于复刻材料信息 生成的计算价格
-  material_price  Float  @default(0.00)
+  material_price       Float  @default(0.00)
   material_final_price Float  @default(0.00)
   // 打磨
   grinding_id          Int
@@ -611,26 +609,26 @@ model Cart {
   grinding_final_price Float  @default(0.00)
 
   // 喷漆
-  paint_id            Int
-  paint_list          Json    @default("{\"c\":[],\"u\":[]}") // json string
-  paint_start_price   Float   @default(0.00)
-  paint_unit_price    Float   @default(0.00)
+  paint_id          Int
+  paint_list        Json  @default("{\"c\":[],\"u\":[]}") // json string
+  paint_start_price Float @default(0.00)
+  paint_unit_price  Float @default(0.00)
   //  上面为 喷漆材料信息    下面为基于喷漆材料信息 生成的计算价格
-  paint_price         Float   @default(0.00)
-  paint_final_price   Float  @default(0.00)
+  paint_price       Float @default(0.00)
+  paint_final_price Float @default(0.00)
 
   // 螺母
-  nut_id            Int
-  nut_list          Json  @default("[]")
-  nut_unit_price    Float  @default(0.00)  // 如果是不需要 则单价是0
+  nut_id          Int
+  nut_list        Json  @default("[]")
+  nut_unit_price  Float @default(0.00) // 如果是不需要 则单价是0
   //  上面为 螺母材料信息    下面为基于螺母材料信息 生成的计算价格
-  nut_price         Float  @default(0.00)
-  nut_final_price   Float  @default(0.00)
+  nut_price       Float @default(0.00)
+  nut_final_price Float @default(0.00)
 
   //  层高
-  ceil_height_id          Int
-  ceil_height_name        String
-  ceil_height_rate      Float  @default(1.00)
+  ceil_height_id   Int
+  ceil_height_name String
+  ceil_height_rate Float  @default(1.00)
   //  上面为 层高材料信息    下面为基于层高材料信息 生成的计算价格
   // ceil_height_price       Float  @default(0.00)
   // ceil_height_final_price Float  @default(0.00)
@@ -650,7 +648,7 @@ model Cart {
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
-  total_price Float @default(0.00)
+  total_price       Float @default(0.00)
   total_final_price Float @default(0.00)
 
   @@map("carts")
@@ -667,6 +665,7 @@ model DeliveryInfo {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
   active      Boolean  @default(true)
+
   @@map("delivery_infos")
 }
 
@@ -677,7 +676,7 @@ model AddressInfo {
   user       User     @relation(fields: [userId], references: [id])
   name       String   @db.VarChar(50)
   phone      String   @db.VarChar(11)
-  region     Json  ?  @default("[]")
+  region     Json?    @default("[]")
   address    String   @db.VarChar(255)
   tag        String   @db.VarChar(50)
   is_default Boolean  @default(false)
@@ -818,19 +817,19 @@ enum ReceiptType {
 
 //  订单
 model OrderInfo {
-  id       Int    @id @default(autoincrement())
-  order_no String @db.VarChar(50)
-  userId Int  @map("user_id")
-  user   User @relation(fields: [userId], references: [id])
-  paymentOrderId Int?      @map("payment_order_id")
-  paymentOrder   PayOrder? @relation(fields: [paymentOrderId], references: [id])
+  id                   Int       @id @default(autoincrement())
+  order_no             String    @db.VarChar(50)
+  userId               Int       @map("user_id")
+  user                 User      @relation(fields: [userId], references: [id])
+  paymentOrderId       Int?      @map("payment_order_id")
+  paymentOrder         PayOrder? @relation(fields: [paymentOrderId], references: [id])
   //  购物车
   cart                 Cart[]
   //  交期信息
-  delivery_name        String @db.VarChar(50)
-  delivery_duration    Int    @default(0)
-  delivery_price       Float  @default(0.00)
-  delivery_final_price Float  @default(0.00)
+  delivery_name        String    @db.VarChar(50)
+  delivery_duration    Int       @default(0)
+  delivery_price       Float     @default(0.00)
+  delivery_final_price Float     @default(0.00)
 
   // 收货人
   address_name   String @db.VarChar(50)
@@ -880,7 +879,6 @@ model OrderInfo {
   @@map("order_infos")
 }
 
-
 enum BOMCategory {
   NUT // 螺母
   PAINT // 喷漆
@@ -891,20 +889,19 @@ enum BOMCategory {
 
 //  BOM物料清单
 model Bom {
-  id Int @id @default(autoincrement())
-  code String @db.VarChar(50)
-  name String @db.VarChar(50)
-  color String? @db.VarChar(50)
-  sort Int @default(0)
-  unit String @db.VarChar(50)
-  category BOMCategory @default(MATERIAL)
-  count Int @default(0)
-  unit_price Float @default(0.00)
-  total_price Float @default(0.00)
-  description String? @db.VarChar(255)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id          Int         @id @default(autoincrement())
+  code        String      @db.VarChar(50)
+  name        String      @db.VarChar(50)
+  color       String?     @db.VarChar(50)
+  sort        Int         @default(0)
+  unit        String      @db.VarChar(50)
+  category    BOMCategory @default(MATERIAL)
+  count       Int         @default(0)
+  unit_price  Float       @default(0.00)
+  total_price Float       @default(0.00)
+  description String?     @db.VarChar(255)
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
 
   @@map("boms")
 }
-
