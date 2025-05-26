@@ -123,8 +123,8 @@ function PasswordloginComLqh() {
             // 新增一个键盘enter按下调用密码登录接口--其他页面也会跟着执行
             onKeyDown={(e) => e.key === "Enter" && onFinish}
             onChange={(e) => form.setFieldValue("password", e.target.value.replaceAll(" ", ""))}
-            // 现在最多输入12位
-            maxLength={12}
+            // 现在最多输入30位
+            maxLength={30}
           />
         </Form.Item>
 

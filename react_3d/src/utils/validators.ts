@@ -12,8 +12,8 @@ export const validatePassword = (value: string): Promise<void> => {
     return Promise.reject(new Error("请输入新密码"))
   }
 
-  if (value.length < 6 || value.length > 12) {
-    return Promise.reject(new Error("密码必须为 6-12 个字符！"))
+  if (value.length < 6 || value.length > 30) {
+    return Promise.reject(new Error("密码必须为 6-30 个字符！"))
   }
 
   return Promise.resolve()
@@ -134,8 +134,8 @@ export const validatetransactionSetPaymentPwd = (value: string) => {
   if (!value) {
     return Promise.reject(new Error("请输入新密码"))
   }
-  if (value.length < 8 || value.length > 12) {
-    return Promise.reject(new Error("密码必须为 8-12 个字符！"))
+  if (value.length < 6 || value.length > 30) {
+    return Promise.reject(new Error("密码必须为 6-30 个字符！"))
   }
   return Promise.resolve()
 }
