@@ -296,7 +296,7 @@ model Wallet {
   user          User           @relation("UserWallet", fields: [userId], references: [id])
   balance       Float          @default(0.00) //  DECIMAL  可用余额
   frozenBalance Float          @default(0.00) //  DECIMAL  冻结余额
-  status        Int            @default(0) // 0: 正常 1: 冻结 
+  status        Int            @default(0) // 0: 正常 1: 冻结
   createdAt     DateTime       @default(now()) @map("created_at")
   updatedAt     DateTime       @updatedAt @map("updated_at")
   walletRecords WalletRecord[]
@@ -400,7 +400,7 @@ model PointRecord {
   user            User     @relation(fields: [userId], references: [id])
   type            Int      @default(0) // 0: 增加 1: 减少 2: 过期
   source_type     Int      @default(0) //  积分来源 0: 系统 1: 用户 2: 活动 3: 其他
-  source_id       Int?     @map("source_id") // 可选  积分来源   订单id 
+  source_id       Int?     @map("source_id") // 可选  积分来源   订单id
   amount          Int      @default(0)
   available_after Int      @default(0)
   createdAt       DateTime @default(now()) @map("created_at")
@@ -409,7 +409,7 @@ model PointRecord {
   @@map("point_records")
 }
 
-//  上传    历史     购物车    订单    
+//  上传    历史     购物车    订单
 enum File3DType {
   stl // stl
   obj // obj
@@ -460,7 +460,7 @@ model FileInfo {
 // }
 
 enum MaterialType {
-  //  光敏树脂 高分子粉末  金属粉末  线材  陶瓷   尼龙 
+  //  光敏树脂 高分子粉末  金属粉末  线材  陶瓷   尼龙
   RESIN // 光敏树脂
   POLYMER_POWDER // 高分子粉末
   METAL_POWDER // 金属粉末
@@ -512,7 +512,7 @@ model Specification {
   is_tag    Boolean           @default(false)
 
   // 删除 Specification 时，同时删除所有关联的 SpecList
-  list      SpecList[]       
+  list      SpecList[]
 
   // 自关联：children 被删除时不连带父级；父级被删除时，子级的 parentId 被设为 null
   children  Specification[]   @relation("SpecificationChildren")
@@ -612,8 +612,8 @@ model Cart {
 
   // 喷漆
   paint_id            Int
-  paint_list          Json    @default("{\"c\":[],\"u\":[]}") // json string 
-  paint_start_price   Float   @default(0.00) 
+  paint_list          Json    @default("{\"c\":[],\"u\":[]}") // json string
+  paint_start_price   Float   @default(0.00)
   paint_unit_price    Float   @default(0.00)
   //  上面为 喷漆材料信息    下面为基于喷漆材料信息 生成的计算价格
   paint_price         Float   @default(0.00)
@@ -677,7 +677,7 @@ model AddressInfo {
   user       User     @relation(fields: [userId], references: [id])
   name       String   @db.VarChar(50)
   phone      String   @db.VarChar(11)
-  region     String   @db.VarChar(50)
+  region     Json  ?  @default("[]")
   address    String   @db.VarChar(255)
   tag        String   @db.VarChar(50)
   is_default Boolean  @default(false)
@@ -797,7 +797,7 @@ model OrderStatusHistory {
 }
 
 enum OrderStatus {
-  PENDING_PAYMENT // 待支付 
+  PENDING_PAYMENT // 待支付
   PAID // 已支付
   SHIPPED // 已发货
   RECEIVED // 已收货
@@ -852,10 +852,10 @@ model OrderInfo {
   // 发货方式
   delivery_type Int @default(0) // 0: 一起发货 1: 分开发货 2: 分开发货
 
-  //  发票  信息 
+  //  发票  信息
   invoice_info Json @default("{}")
 
-  // 收据 类型 
+  // 收据 类型
   receipt_type ReceiptType @default(PAPER) // 0: 纸质发票 1: 电子收据
 
   description       String? @db.VarChar(255)
