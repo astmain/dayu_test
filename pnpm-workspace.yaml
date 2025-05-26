@@ -1,0 +1,32 @@
+packages:
+  # 系统模块 =====================================================
+  - "back_api"      #后端接口
+  - "backstage"     #后台管理
+  - "react_3d"      #商城
+
+
+  
+  
+
+  
+  
+#git取消追踪文件          git rm --cached *.db 
+#git取消追踪文件          git rm --cached D:\AAA\dayu_system_03\dayu04_end\src\db_orm_prisma\db_dev_sqlited.db
+
+
+#1绑定文件               git init && git remote add origin  git@github.com:astmain/dayu_test.git
+
+#强制上传                echo "确定:强制上传吗?" && TIMEOUT /T 60 && echo "如果确定:请回车" && git add . && git commit -m "强制上传" && git push -f origin  master
+
+#本地分支跟踪远程分支     git branch --set-upstream-to=origin/master master
+
+
+
+# 软路由
+# iStoreOS
+# 192.168.1.1
+# root
+# dayu*.*1688
+# 服务
+# 设置github放行端口     openClash-插件设置-流量控制-本地 IPv4 绕过地址-把IP地址粘贴过去-保存
+# metacubexd

@@ -1,0 +1,910 @@
+// ignore 
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./client/postgresql"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator classGenerator {
+  provider      = "prisma-class-generator"
+  useValidation = true // 是否添加 class-validator 装饰器
+  dryRun        = false // ❗❗ 加上这个才能真正生成文件
+  output        = "./dto"
+}
+
+model User {
+  id                 Int                  @id @default(autoincrement())
+  username           String               @db.VarChar(50)
+  password           String               @db.VarChar(255)
+  avatar             String?              @db.VarChar(255)
+  email              String?              @db.VarChar(50)
+  phone              String               @unique @db.Char(11)
+  birthday           String?
+  gender             String?
+  status             Boolean              @default(true)
+  wechatId           String?              @unique @map("wechat_id")
+  wechatInfo         WechatInfo?          @relation(fields: [wechatId], references: [unionid])
+  cart               Cart[]
+  order              OrderInfo[]
+  wallet             Wallet?              @relation("UserWallet")
+  point              Point?               @relation("UserPoint")
+  fileInfo           FileInfo[]
+  contactInfo        ContactInfo[]
+  addressInfo        AddressInfo[]
+  invoiceInfo        InvoiceInfo[]
+  walletRecords      WalletRecord[]
+  payOrders          PayOrder[]
+  paymentCredentials PaymentCredential[]
+  pointRecords       PointRecord[]
+  userCoupons        UserCoupon[]
+  isDeleted          Boolean              @default(false) @map("is_deleted")
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
+  OrderStatusHistory OrderStatusHistory[]
+
+  //  员工部分
+
+  departmentId     Int?              @map("department_id")
+  department       Department?       @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  notices          Notice[]
+  noticeRecipients NoticeRecipient[]
+  roles            Role[]
+  requestLogs      RequestLog[]
+
+  @@index([phone])
+  @@map("users")
+}
+
+
+model WechatInfo {
+  id           Int      @id @default(autoincrement())
+  accessToken  String   @map("access_token")
+  refreshToken String   @map("refresh_token")
+  openid       String
+  unionid      String   @unique
+  nickname     String
+  headimgurl   String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  user         User?
+
+  @@index([openid])
+  @@map("wechat_info")
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique @db.VarChar(50)
+  remark      String?      @db.VarChar(100)
+  status      Boolean      @default(true)
+  isDeleted   Boolean      @default(false) @map("is_deleted")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  deletedAt   DateTime?    @map("deleted_at")
+  permissions Permission[] @relation("RolePermissions")
+  users       User[]
+  menus       Menu[]       @relation("RoleMenus")
+
+  @@index([isDeleted])
+  @@map("roles")
+}
+
+model Department {
+  id        Int          @id @default(autoincrement())
+  name      String       @db.VarChar(50)
+  status    Boolean      @default(true)
+  remark    String?      @db.VarChar(100)
+  isDeleted Boolean      @default(false) @map("is_deleted")
+  parentId  Int?         @map("parent_id")
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+  deletedAt DateTime?    @map("deleted_at")
+  users     User[]
+  parent    Department?  @relation("DepartmentSelf", fields: [parentId], references: [id])
+  children  Department[] @relation("DepartmentSelf")
+
+  @@index([parentId])
+  @@index([isDeleted])
+  @@map("departments")
+}
+
+model Menu {
+  id             Int          @id @default(autoincrement())
+  name           String       @db.VarChar(50)
+  path           String       @db.VarChar(100)
+  redirect       String?      @db.VarChar(100)
+  type           Int? // 当type=1时说明是子组件 而不是目录  用于回显菜单类型
+  component      String       @db.VarChar(100)
+  sort           Int?         @default(0)
+  status         Boolean      @default(true)
+  isDeleted      Boolean      @default(false) @map("is_deleted")
+  parentId       Int?         @map("parent_id")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at")
+  deletedAt      DateTime?    @map("deleted_at")
+  meta           Meta?
+  permissionList Permission[]
+  roles          Role[]       @relation("RoleMenus")
+  parent         Menu?        @relation("MenuSelf", fields: [parentId], references: [id])
+  children       Menu[]       @relation("MenuSelf")
+
+  @@index([parentId])
+  @@index([isDeleted])
+  @@index([path])
+  @@map("menus")
+}
+
+model Meta {
+  id         Int       @id @default(autoincrement())
+  title      String?   @db.VarChar(50)
+  icon       String?   @db.VarChar(50)
+  affix      Boolean   @default(false)
+  activeMenu String?   @map("active_menu") @db.VarChar(50)
+  alwaysShow Boolean   @default(false) @map("always_show")
+  breadcrumb Boolean   @default(true)
+  canTo      Boolean   @default(false) @map("can_to")
+  hidden     Boolean   @default(false)
+  noCache    Boolean   @default(false) @map("no_cache")
+  noTagsView Boolean   @default(false) @map("no_tags_view")
+  isDeleted  Boolean   @default(false) @map("is_deleted")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
+  menuId     Int       @unique @map("menu_id")
+  menu       Menu      @relation(fields: [menuId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("metas")
+}
+
+model Permission {
+  id        Int       @id @default(autoincrement())
+  label     String    @db.VarChar(50)
+  value     String    @db.VarChar(50)
+  name      String?   @db.VarChar(50) //  配合控制器api 实现唯一性控制
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  menuId    Int       @map("menu_id")
+  menu      Menu      @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  roles     Role[]    @relation("RolePermissions")
+
+  @@unique([menuId, value])
+  @@index([isDeleted])
+  @@map("permissions")
+}
+
+model RequestLog {
+  id          Int      @id @default(autoincrement())
+  method      String   @db.VarChar(10)
+  url         String   @db.VarChar(255)
+  resCode     Int      @map("res_code")
+  ip          String   @db.VarChar(50)
+  userAgent   String   @map("user_agent") @db.VarChar(255)
+  feedbackMsg String?  @map("feedback_msg")
+  duration    Int?
+  userId      Int?     @map("user_id")
+  user        User?    @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("request_logs")
+}
+
+model File {
+  id         Int      @id @default(autoincrement())
+  filename   String   @db.VarChar(255)
+  filepath   String?  @db.VarChar(255)
+  uploader   String?  @db.VarChar(50)
+  uploaderId Int?     @map("uploader_id")
+  extension  String?  @db.VarChar(20)
+  name       String   @db.VarChar(255)
+  remark     String?
+  sha256     String   @unique @db.Char(64)
+  size       Int
+  url        String   @db.VarChar(255)
+  isDeleted  Boolean  @default(false) @map("is_deleted")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([isDeleted])
+  @@index([extension])
+  @@map("files")
+}
+
+model Notice {
+  id          Int               @id @default(autoincrement())
+  title       String            @db.VarChar(100)
+  type        String            @db.VarChar(50)
+  content     String            @db.Text
+  isPublished Boolean           @default(false) @map("is_published")
+  isDeleted   Boolean           @default(false) @map("is_deleted")
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+  deletedAt   DateTime?         @map("deleted_at")
+  creatorId   Int               @map("creator_id")
+  creator     User              @relation(fields: [creatorId], references: [id])
+  recipients  NoticeRecipient[]
+
+  @@index([creatorId])
+  @@index([isDeleted])
+  @@index([isPublished])
+  @@map("notices")
+}
+
+model NoticeRecipient {
+  id        Int      @id @default(autoincrement())
+  noticeId  Int      @map("notice_id")
+  userId    Int      @map("user_id")
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+  notice    Notice   @relation(fields: [noticeId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([noticeId, userId])
+  @@index([isRead])
+  @@map("notice_recipients")
+}
+
+// 字典模块
+
+model Dictionary {
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(50)
+  code        String     @db.VarChar(50)
+  sort        Int        @default(0)
+  description String?    @db.VarChar(200)
+  status      Boolean    @default(true)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  entries     DicEntry[]
+
+  @@index([code])
+  @@map("dictionaries")
+}
+
+model DicEntry {
+  id           Int        @id @default(autoincrement())
+  name         String     @db.VarChar(50)
+  code         String     @db.VarChar(50)
+  description  String?    @db.VarChar(200)
+  sort         Int        @default(0)
+  status       Boolean    @default(true)
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+  dictionaryId Int        @map("dictionary_id")
+  dictionary   Dictionary @relation(fields: [dictionaryId], references: [id], onDelete: Cascade)
+
+  // @@unique([dictionaryId, code])
+  @@index([code])
+  @@map("dic_entries")
+}
+
+//  公共模块数据库表
+
+//  前台pc端 对应部分的 表格
+
+model Wallet {
+  id            Int            @id @default(autoincrement())
+  userId        Int            @unique @map("user_id")
+  user          User           @relation("UserWallet", fields: [userId], references: [id])
+  balance       Float          @default(0.00) //  DECIMAL  可用余额
+  frozenBalance Float          @default(0.00) //  DECIMAL  冻结余额
+  status        Int            @default(0) // 0: 正常 1: 冻结 
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  walletRecords WalletRecord[]
+
+  @@map("wallets")
+}
+
+enum WalletRecordType {
+  RECHARGE // 充值
+  WITHDRAW // 提现
+  CONSUME // 消费
+  REFUND // 退款
+}
+
+model WalletRecord {
+  id            Int              @id @default(autoincrement())
+  walletId      Int              @map("wallet_id")
+  wallet        Wallet           @relation(fields: [walletId], references: [id])
+  amount        Float            @default(0.00) //  DECIMAL  变动  金额
+  balance_after Float            @default(0.00) //  DECIMAL  消费后 余额
+  type          WalletRecordType // 0: 充值 1: 提现 2: 消费 3: 退款 4: 转账 5: 其他
+  related_id    Int?             @map("related_id") //  关联业务id
+
+  payment_order_id Int?           @map("payment_order_id") //  关联支付订单id
+  payment_order    PayOrder?      @relation(fields: [payment_order_id], references: [id])
+  status           PayOrderStatus // 0: 成功 1: 失败 2: 处理中 3: 已取消
+  createdAt        DateTime       @default(now()) @map("created_at")
+  description      String?        @db.VarChar(255) //  描述
+  user             User?          @relation(fields: [userId], references: [id])
+  userId           Int?
+
+  @@map("wallet_records")
+}
+
+// 操作类型	钱包表更新	流水表记录
+// 充值	balance += amount	type = RECHARGE
+// 支付	balance -= amount	type = PAY
+// 退款	balance += amount	type = REFUND
+// 冻结	balance -= x；frozen += x	type = FREEZE
+// 解冻	frozen -= x；balance += x	type = UNFREEZE
+
+enum PayMethod {
+  WECHAT // 微信
+  ALIPAY // 支付宝
+  WALLET // 钱包
+  BANK // 银行卡
+  CREDIT // 信用额度
+}
+
+enum PayOrderStatus {
+  SUCCESS // 成功
+  FAILED // 失败
+  PROCESSING // 处理中
+  CANCELLED // 已取消
+}
+
+model PayOrder {
+  id             Int            @id @default(autoincrement())
+  userId         Int            @map("user_id")
+  user           User           @relation(fields: [userId], references: [id])
+  walletRecords  WalletRecord[]
+  amount         Float          @default(0.00) //  DECIMAL  金额
+  method         PayMethod      @default(WECHAT)
+  status         PayOrderStatus @default(SUCCESS)
+  transaction_id String?        @db.VarChar(255) // 第三方 交易id
+  createdAt      DateTime       @default(now()) @map("created_at")
+  paidAt         DateTime?      @map("paid_at")
+  orderInfos     OrderInfo[]
+
+  @@map("pay_orders")
+}
+
+model PaymentCredential {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @map("user_id")
+  user         User      @relation(fields: [userId], references: [id])
+  password     String    @db.VarChar(255)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  retry_count  Int       @default(0)
+  locked_until DateTime? @map("locked_until")
+
+  @@map("payment_credentials")
+}
+
+model Point {
+  id               Int      @id @default(autoincrement())
+  userId           Int      @unique @map("user_id")
+  user             User     @relation("UserPoint", fields: [userId], references: [id])
+  available_points Int      @default(0)
+  total_used       Int      @default(0)
+  total_points     Int      @default(0)
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("points")
+}
+
+model PointRecord {
+  id              Int      @id @default(autoincrement())
+  userId          Int      @map("user_id")
+  user            User     @relation(fields: [userId], references: [id])
+  type            Int      @default(0) // 0: 增加 1: 减少 2: 过期
+  source_type     Int      @default(0) //  积分来源 0: 系统 1: 用户 2: 活动 3: 其他
+  source_id       Int?     @map("source_id") // 可选  积分来源   订单id 
+  amount          Int      @default(0)
+  available_after Int      @default(0)
+  createdAt       DateTime @default(now()) @map("created_at")
+  description     String?  @db.VarChar(255) //  描述
+
+  @@map("point_records")
+}
+
+//  上传    历史     购物车    订单    
+enum File3DType {
+  stl // stl
+  obj // obj
+  stp // stp
+  igs // igs
+}
+
+//  这里可能需要区分 上传者 身份  员工  客户
+model FileInfo {
+  id                   Int        @id @default(autoincrement())
+  cart                 Cart[]
+  filename             String     @db.VarChar(255)
+  filepath             String     @db.VarChar(255)
+  screenshot           String?    @db.VarChar(255)
+  uploaderId           Int        @map("uploader_id")
+  uploader             User       @relation(fields: [uploaderId], references: [id])
+  sha256               String     @db.Char(64)
+  length               Float      @default(0)
+  width                Float      @default(0)
+  height               Float      @default(0)
+  volume               Float      @default(0)
+  surface              Float      @default(0)
+  triangles            Int        @default(0)
+  points               Int        @default(0)
+  min_thickness        Float      @default(0)
+  thickness_proportion Float      @default(0)
+  geometric_complexity Int        @default(0)
+  structural_strength  Int        @default(0)
+  createdAt            DateTime   @default(now()) @map("created_at")
+  is_deleted           Boolean    @default(false)
+  file_type            File3DType @default(stl) // 文件类型
+  file_size            Float      @default(0) // 文件大小
+
+  @@map("file_infos")
+}
+
+//  上传历史   不需要
+// model UploadHistory {
+//   id         Int      @id @default(autoincrement())
+//   customerId Int      @map("customer_id")
+//   customer   Customer @relation(fields: [customerId], references: [id])
+//   fileInfoId Int      @map("file_info_id")
+//   fileInfo   FileInfo @relation(fields: [fileInfoId], references: [id])
+//   createdAt  DateTime @default(now()) @map("created_at")
+//   updatedAt  DateTime @updatedAt @map("updated_at")
+
+//   @@map("upload_histories")
+// }
+
+enum MaterialType {
+  //  光敏树脂 高分子粉末  金属粉末  线材  陶瓷   尼龙 
+  RESIN // 光敏树脂
+  POLYMER_POWDER // 高分子粉末
+  METAL_POWDER // 金属粉末
+  WIRE // 线材
+  CERAMIC // 陶瓷
+  NYLON // 尼龙
+  OTHER // 其他
+}
+
+enum MaterialProcess {
+  LIGHT_CURE // 光固化
+  CUT // 切割
+  DRILL // 钻孔
+  OTHER // 其他
+}
+
+// 材料
+model Material {
+  id Int @id @default(autoincrement())
+
+  code                   String          @db.VarChar(50)
+  name                   String          @db.VarChar(50)
+  price                  Float           @default(0.00)
+  start_price            Float           @default(0.00)
+  color                  String          @db.VarChar(50)
+  process                MaterialProcess @default(LIGHT_CURE)
+  property               String          @db.VarChar(50)
+  // Decimal 保留2位小数
+  density                Float           @default(0.00)
+  structural_strength    Float           @default(0.00)
+  shrinkage_rate         Float           @default(0.00)
+  advantages             String          @db.VarChar(50)
+  disadvantages          String          @db.VarChar(50)
+  temperature_resistance String          @db.VarChar(50)
+  type                   MaterialType    @default(RESIN)
+  is_default             Boolean         @default(false)
+  img_url                Json            @default("[]")
+  description            String?         @db.VarChar(100)
+  createdAt              DateTime        @default(now()) @map("created_at")
+  updatedAt              DateTime        @updatedAt @map("updated_at")
+
+  @@map("materials")
+}
+
+//  规格
+model Specification {
+  id        Int               @id @default(autoincrement())
+  name      String            @db.VarChar(50)
+  is_tag    Boolean           @default(false)
+
+  // 删除 Specification 时，同时删除所有关联的 SpecList
+  list      SpecList[]       
+
+  // 自关联：children 被删除时不连带父级；父级被删除时，子级的 parentId 被设为 null
+  children  Specification[]   @relation("SpecificationChildren")
+  parentId  Int?              @map("parent_id")
+  parent    Specification?    @relation("SpecificationChildren", fields: [parentId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+
+  @@map("specifications")
+}
+
+model SpecList {
+  id              Int             @id @default(autoincrement())
+  name            String          @db.VarChar(50)
+  price           Float          @default(1.00)
+  start_price     Float          @default(0.00)
+  is_default      Boolean         @default(false)
+
+  // 规范的外键定义：当 Specification 被删除，列表被级联删除
+  specificationId Int
+  specification   Specification   @relation(fields: [specificationId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+
+  @@map("speclists")
+}
+
+
+model HoleImg {
+  id           Int      @id @default(autoincrement())
+  cartId       Int      @map("cart_id")
+  cart         Cart     @relation(fields: [cartId], references: [id])
+  name         String   @db.VarChar(50)
+  url          String   @db.VarChar(255)
+  storage_path String   @db.VarChar(255)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("hole_imgs")
+}
+
+enum AttachmentType {
+  IMAGE // 图片
+  VIDEO // 视频
+  AUDIO // 音频
+  WORD // 文档
+  EXCEL // 表格
+  PDF // PDF
+  OTHER // 其他
+}
+
+model Attachment {
+  id           Int            @id @default(autoincrement())
+  cartId       Int            @map("cart_id")
+  cart         Cart           @relation(fields: [cartId], references: [id])
+  type         AttachmentType @default(IMAGE) // 0: 图片 1: 视频 2: 音频 3: 其他
+  name         String         @db.VarChar(50)
+  url          String         @db.VarChar(255)
+  storage_path String         @db.VarChar(255)
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  @@map("attachments")
+}
+
+//  购物车
+model Cart {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")  //  别名
+  user       User     @relation(fields: [userId], references: [id])
+  fileInfoId Int      @map("file_info_id")
+  fileInfo   FileInfo @relation(fields: [fileInfoId], references: [id])
+  count      Int      @default(0)
+
+// 单独存储 方便价格计算  避免反复关联外表查询
+  volume Float @default(0.00)
+  surface Float @default(0.00)
+  //  材料  信息  回显
+  material_id          Int
+  material_name        String
+  material_density Float  @default(0.00)
+  material_unit_price  Float  @default(0.00)
+  material_start_price Float  @default(0.00)
+  //  上面为 复刻材料信息    下面为基于复刻材料信息 生成的计算价格
+  material_price  Float  @default(0.00)
+  material_final_price Float  @default(0.00)
+  // 打磨
+  grinding_id          Int
+  grinding_name        String
+  grinding_start_price Float  @default(0.00)
+  grinding_unit_price  Float  @default(0.00)
+  //  上面为 打磨材料信息    下面为基于打磨材料信息 生成的计算价格
+  grinding_price       Float  @default(0.00)
+  grinding_final_price Float  @default(0.00)
+
+  // 喷漆
+  paint_id            Int
+  paint_list          Json    @default("{\"c\":[],\"u\":[]}") // json string 
+  paint_start_price   Float   @default(0.00) 
+  paint_unit_price    Float   @default(0.00)
+  //  上面为 喷漆材料信息    下面为基于喷漆材料信息 生成的计算价格
+  paint_price         Float   @default(0.00)
+  paint_final_price   Float  @default(0.00)
+
+  // 螺母
+  nut_id            Int
+  nut_list          Json  @default("[]")
+  nut_unit_price    Float  @default(0.00)  // 如果是不需要 则单价是0
+  //  上面为 螺母材料信息    下面为基于螺母材料信息 生成的计算价格
+  nut_price         Float  @default(0.00)
+  nut_final_price   Float  @default(0.00)
+
+  //  层高
+  ceil_height_id          Int
+  ceil_height_name        String
+  ceil_height_rate      Float  @default(1.00)
+  //  上面为 层高材料信息    下面为基于层高材料信息 生成的计算价格
+  // ceil_height_price       Float  @default(0.00)
+  // ceil_height_final_price Float  @default(0.00)
+
+  //  孔洞图片
+  hole_imgs HoleImg[]
+
+  //  附件 图片url 数组
+  attachments Attachment[]
+
+  //  是否生成了订单
+  is_order Boolean    @default(false)
+  order_id Int?       @map("order_id")
+  order    OrderInfo? @relation(fields: [order_id], references: [id])
+
+  is_deleted Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  total_price Float @default(0.00)
+  total_final_price Float @default(0.00)
+
+  @@map("carts")
+}
+
+//  交期
+model DeliveryInfo {
+  id          Int      @id @default(autoincrement())
+  price       Float    @default(0.00)
+  name        String   @db.VarChar(50)
+  duration    Int      @default(0)
+  description String?  @db.VarChar(255)
+  is_default  Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  active      Boolean  @default(true)
+  @@map("delivery_infos")
+}
+
+//  地址
+model AddressInfo {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  user       User     @relation(fields: [userId], references: [id])
+  name       String   @db.VarChar(50)
+  phone      String   @db.VarChar(11)
+  region     String   @db.VarChar(50)
+  address    String   @db.VarChar(255)
+  tag        String   @db.VarChar(50)
+  is_default Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("address_infos")
+}
+
+//  联系人
+model ContactInfo {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  user       User     @relation(fields: [userId], references: [id])
+  name       String   @db.VarChar(50)
+  phone      String   @db.VarChar(11)
+  tech_name  String   @db.VarChar(50)
+  tech_phone String   @db.VarChar(11)
+  is_default Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("contact_infos")
+}
+
+//  物流
+model TransportationType {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(50)
+  api_url     String   @db.VarChar(255)
+  api_key     String?  @db.VarChar(255)
+  api_secret  String?  @db.VarChar(255)
+  description String?  @db.VarChar(255)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("transportation_types")
+}
+
+//  发票
+model InvoiceInfo {
+  id                   Int     @id @default(autoincrement())
+  userId               Int     @map("user_id")
+  user                 User    @relation(fields: [userId], references: [id])
+  entity_type          Int     @default(0) // 0: 个人 1: 企业
+  invoice_type         Int     @default(0) // 0: 增值税专用发票 1: 增值税普通发票 2: 增值税电子发票 3: 增值税电子普通发票 4: 增值税电子专用发票 5: 增值税电子普通发票(卷式) 6: 增值税电子专用发票(卷式) 7: 增值税电子普通发票(卷式) 8: 增值税电子专用发票(卷式) 9: 增值税电子普通发票(卷式) 10: 增值税电子专用发票(卷式)
+  personal_name        String? @db.VarChar(50)
+  personal_phone       String? @db.VarChar(11)
+  personal_email       String? @db.VarChar(50)
+  company_name         String? @db.VarChar(50)
+  company_phone        String? @db.VarChar(11)
+  company_tax_id       String? @db.VarChar(50)
+  company_email        String? @db.VarChar(50)
+  company_bank_account String? @db.VarChar(50)
+  company_bank_name    String? @db.VarChar(50)
+
+  @@map("invoice_infos")
+}
+
+model Coupon {
+  id             Int          @id @default(autoincrement())
+  code           String       @unique @db.VarChar(50)
+  type           Int          @default(0) // 0: 满减 1: 折扣
+  value          Float        @default(0.00)
+  // 最大使用次数
+  max_used_count Int          @default(0)
+  minAmount      Float        @default(0.00)
+  startTime      DateTime
+  endTime        DateTime
+  status         Boolean      @default(true)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  userCoupons    UserCoupon[]
+  orderInfos     OrderInfo[]
+
+  @@map("coupons")
+}
+
+model UserCoupon {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  user      User      @relation(fields: [userId], references: [id])
+  couponId  Int       @map("coupon_id")
+  coupon    Coupon    @relation(fields: [couponId], references: [id])
+  isUsed    Boolean   @default(false)
+  usedAt    DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([userId, couponId])
+  @@index([isUsed])
+  @@map("user_coupons")
+}
+
+model OrderLogistics {
+  id               Int       @id @default(autoincrement())
+  orderId          Int       @map("order_id")
+  order            OrderInfo @relation(fields: [orderId], references: [id])
+  trackingNumber   String    @db.VarChar(50)
+  logisticsCompany String    @db.VarChar(50)
+  status           Int       @default(0)
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  @@map("order_logistics")
+}
+
+model OrderStatusHistory {
+  id         Int       @id @default(autoincrement())
+  orderId    Int       @map("order_id")
+  order      OrderInfo @relation(fields: [orderId], references: [id])
+  status     Int
+  remark     String?   @db.VarChar(255)
+  operatorId Int?      @map("operator_id")
+  operator   User?     @relation(fields: [operatorId], references: [id])
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  @@map("order_status_histories")
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT // 待支付 
+  PAID // 已支付
+  SHIPPED // 已发货
+  RECEIVED // 已收货
+  CANCELLED // 已取消
+  REFUNDED // 已退款
+  REVIEWED // 已评价
+  PRICE_CHANGED // 已改价
+  CLOSED // 已关闭
+  DELETED // 已删除
+  EXPIRED // 已过期
+  INVALID // 已失效
+}
+
+enum ReceiptType {
+  PAPER // 纸质发票
+  ELECTRONIC // 电子收据
+}
+
+//  订单
+model OrderInfo {
+  id       Int    @id @default(autoincrement())
+  order_no String @db.VarChar(50)
+  userId Int  @map("user_id")
+  user   User @relation(fields: [userId], references: [id])
+  paymentOrderId Int?      @map("payment_order_id")
+  paymentOrder   PayOrder? @relation(fields: [paymentOrderId], references: [id])
+  //  购物车
+  cart                 Cart[]
+  //  交期信息
+  delivery_name        String @db.VarChar(50)
+  delivery_duration    Int    @default(0)
+  delivery_price       Float  @default(0.00)
+  delivery_final_price Float  @default(0.00)
+
+  // 收货人
+  address_name   String @db.VarChar(50)
+  address_phone  String @db.VarChar(11)
+  address_detail String @db.VarChar(255)
+
+  //  联系人
+  contact_name       String @db.VarChar(50)
+  contact_phone      String @db.VarChar(11)
+  contact_tech_name  String @db.VarChar(50)
+  contact_tech_phone String @db.VarChar(11)
+
+  //  物流
+  transportation_weight      Float  @default(0)
+  transportation_name        String @db.VarChar(50)
+  transportation_price       Float  @default(0.00)
+  transportation_final_price Float  @default(0.00)
+
+  // 发货方式
+  delivery_type Int @default(0) // 0: 一起发货 1: 分开发货 2: 分开发货
+
+  //  发票  信息 
+  invoice_info Json @default("{}")
+
+  // 收据 类型 
+  receipt_type ReceiptType @default(PAPER) // 0: 纸质发票 1: 电子收据
+
+  description       String? @db.VarChar(255)
+  //  总价
+  total_price       Float   @default(0.00)
+  total_final_price Float   @default(0.00)
+
+  couponId       Int?    @map("coupon_id")
+  coupon         Coupon? @relation(fields: [couponId], references: [id])
+  discountAmount Float   @default(0.00)
+
+  //  预计发货日期
+  delivery_date        DateTime?            @map("delivery_date")
+  //  订单状态
+  status               OrderStatus          @default(PENDING_PAYMENT) // 0: 待支付 1: 已支付 2: 已发货 3: 已收货 4: 已取消 5: 已退款 6: 已评价 7: 已关闭 8: 已删除 9: 已过期 10: 已失效
+  createdAt            DateTime             @default(now()) @map("created_at")
+  updatedAt            DateTime             @updatedAt @map("updated_at")
+  orderLogistics       OrderLogistics[]
+  orderStatusHistories OrderStatusHistory[]
+
+  @@index([userId, order_no, status])
+  @@map("order_infos")
+}
+
+
+enum BOMCategory {
+  NUT // 螺母
+  PAINT // 喷漆
+  BRACES // 牙套
+  MATERIAL // 材料
+  OTHER // 其他
+}
+
+//  BOM物料清单
+model Bom {
+  id Int @id @default(autoincrement())
+  code String @db.VarChar(50)
+  name String @db.VarChar(50)
+  color String? @db.VarChar(50)
+  sort Int @default(0)
+  unit String @db.VarChar(50)
+  category BOMCategory @default(MATERIAL)
+  count Int @default(0)
+  unit_price Float @default(0.00)
+  total_price Float @default(0.00)
+  description String? @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("boms")
+}
+

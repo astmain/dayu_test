@@ -1,0 +1,25 @@
+{
+  "name": "dayu_system_01",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "back_api": "pnpm    --filter back_api      dev",
+    "backstage": "pnpm   --filter backstage      dev",
+    "react_3d": "pnpm    --filter react_3d      dev",
+    "pnpm操作": "pnpm操作==========================================================",
+    "pnpm清除缓存": "pnpm store prune",
+    "pnpm安装": "pnpm i",
+    "测试": "==========================================================",
+    "安装0": "pnpm  i     ",
+    "安装1": "pnpm -F     api_admin         add          md5   -S     ",
+    "安装2": "pnpm -F     vue_admin         add                    @element-plus/icons-vue   -S     ",
+    "安装3": "pnpm -F     react_3d         add                    @element-plus/icons-vue   -S     "
+
+
+  },
+  "dependencies": {
+    "axios": "1.8.4"
+  },
+  "devDependencies": {
+  }
+}
