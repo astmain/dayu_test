@@ -1,5 +1,406 @@
 export const childrenJson = [
   {
+    label: "福建省",
+    value: "福建省",
+    children: [
+      {
+        label: "泉州市",
+        value: "泉州市",
+        children: [
+          {
+            label: "鲤城区",
+            value: "鲤城区",
+          },
+          {
+            label: "丰泽区",
+            value: "丰泽区",
+          },
+          {
+            label: "洛江区",
+            value: "洛江区",
+          },
+          {
+            label: "泉港区",
+            value: "泉港区",
+          },
+          {
+            label: "惠安县",
+            value: "惠安县",
+          },
+          {
+            label: "安溪县",
+            value: "安溪县",
+          },
+          {
+            label: "永春县",
+            value: "永春县",
+          },
+          {
+            label: "德化县",
+            value: "德化县",
+          },
+          {
+            label: "金门县",
+            value: "金门县",
+          },
+          {
+            label: "石狮市",
+            value: "石狮市",
+          },
+          {
+            label: "晋江市",
+            value: "晋江市",
+          },
+          {
+            label: "南安市",
+            value: "南安市",
+          },
+        ],
+      },
+      {
+        label: "福州市",
+        value: "福州市",
+        children: [
+          {
+            label: "鼓楼区",
+            value: "鼓楼区",
+          },
+          {
+            label: "台江区",
+            value: "台江区",
+          },
+          {
+            label: "仓山区",
+            value: "仓山区",
+          },
+          {
+            label: "马尾区",
+            value: "马尾区",
+          },
+          {
+            label: "晋安区",
+            value: "晋安区",
+          },
+          {
+            label: "长乐区",
+            value: "长乐区",
+          },
+          {
+            label: "闽侯县",
+            value: "闽侯县",
+          },
+          {
+            label: "连江县",
+            value: "连江县",
+          },
+          {
+            label: "罗源县",
+            value: "罗源县",
+          },
+          {
+            label: "闽清县",
+            value: "闽清县",
+          },
+          {
+            label: "永泰县",
+            value: "永泰县",
+          },
+          {
+            label: "平潭县",
+            value: "平潭县",
+          },
+          {
+            label: "福清市",
+            value: "福清市",
+          },
+        ],
+      },
+      {
+        label: "厦门市",
+        value: "厦门市",
+        children: [
+          {
+            label: "思明区",
+            value: "思明区",
+          },
+          {
+            label: "海沧区",
+            value: "海沧区",
+          },
+          {
+            label: "湖里区",
+            value: "湖里区",
+          },
+          {
+            label: "集美区",
+            value: "集美区",
+          },
+          {
+            label: "同安区",
+            value: "同安区",
+          },
+          {
+            label: "翔安区",
+            value: "翔安区",
+          },
+        ],
+      },
+      {
+        label: "莆田市",
+        value: "莆田市",
+        children: [
+          {
+            label: "城厢区",
+            value: "城厢区",
+          },
+          {
+            label: "涵江区",
+            value: "涵江区",
+          },
+          {
+            label: "荔城区",
+            value: "荔城区",
+          },
+          {
+            label: "秀屿区",
+            value: "秀屿区",
+          },
+          {
+            label: "仙游县",
+            value: "仙游县",
+          },
+        ],
+      },
+      {
+        label: "三明市",
+        value: "三明市",
+        children: [
+          {
+            label: "梅列区",
+            value: "梅列区",
+          },
+          {
+            label: "三元区",
+            value: "三元区",
+          },
+          {
+            label: "明溪县",
+            value: "明溪县",
+          },
+          {
+            label: "清流县",
+            value: "清流县",
+          },
+          {
+            label: "宁化县",
+            value: "宁化县",
+          },
+          {
+            label: "大田县",
+            value: "大田县",
+          },
+          {
+            label: "尤溪县",
+            value: "尤溪县",
+          },
+          {
+            label: "沙县",
+            value: "沙县",
+          },
+          {
+            label: "将乐县",
+            value: "将乐县",
+          },
+          {
+            label: "泰宁县",
+            value: "泰宁县",
+          },
+          {
+            label: "建宁县",
+            value: "建宁县",
+          },
+          {
+            label: "永安市",
+            value: "永安市",
+          },
+        ],
+      },
+
+      {
+        label: "漳州市",
+        value: "漳州市",
+        children: [
+          {
+            label: "芗城区",
+            value: "芗城区",
+          },
+          {
+            label: "龙文区",
+            value: "龙文区",
+          },
+          {
+            label: "云霄县",
+            value: "云霄县",
+          },
+          {
+            label: "漳浦县",
+            value: "漳浦县",
+          },
+          {
+            label: "诏安县",
+            value: "诏安县",
+          },
+          {
+            label: "长泰县",
+            value: "长泰县",
+          },
+          {
+            label: "东山县",
+            value: "东山县",
+          },
+          {
+            label: "南靖县",
+            value: "南靖县",
+          },
+          {
+            label: "平和县",
+            value: "平和县",
+          },
+          {
+            label: "华安县",
+            value: "华安县",
+          },
+          {
+            label: "龙海市",
+            value: "龙海市",
+          },
+        ],
+      },
+      {
+        label: "南平市",
+        value: "南平市",
+        children: [
+          {
+            label: "延平区",
+            value: "延平区",
+          },
+          {
+            label: "建阳区",
+            value: "建阳区",
+          },
+          {
+            label: "顺昌县",
+            value: "顺昌县",
+          },
+          {
+            label: "浦城县",
+            value: "浦城县",
+          },
+          {
+            label: "光泽县",
+            value: "光泽县",
+          },
+          {
+            label: "松溪县",
+            value: "松溪县",
+          },
+          {
+            label: "政和县",
+            value: "政和县",
+          },
+          {
+            label: "邵武市",
+            value: "邵武市",
+          },
+          {
+            label: "武夷山市",
+            value: "武夷山市",
+          },
+          {
+            label: "建瓯市",
+            value: "建瓯市",
+          },
+        ],
+      },
+      {
+        label: "龙岩市",
+        value: "龙岩市",
+        children: [
+          {
+            label: "新罗区",
+            value: "新罗区",
+          },
+          {
+            label: "长汀县",
+            value: "长汀县",
+          },
+          {
+            label: "永定区",
+            value: "永定区",
+          },
+          {
+            label: "上杭县",
+            value: "上杭县",
+          },
+          {
+            label: "武平县",
+            value: "武平县",
+          },
+          {
+            label: "连城县",
+            value: "连城县",
+          },
+          {
+            label: "漳平市",
+            value: "漳平市",
+          },
+        ],
+      },
+      {
+        label: "宁德市",
+        value: "宁德市",
+        children: [
+          {
+            label: "蕉城区",
+            value: "蕉城区",
+          },
+          {
+            label: "霞浦县",
+            value: "霞浦县",
+          },
+          {
+            label: "古田县",
+            value: "古田县",
+          },
+          {
+            label: "屏南县",
+            value: "屏南县",
+          },
+          {
+            label: "寿宁县",
+            value: "寿宁县",
+          },
+          {
+            label: "周宁县",
+            value: "周宁县",
+          },
+          {
+            label: "柘荣县",
+            value: "柘荣县",
+          },
+          {
+            label: "福安市",
+            value: "福安市",
+          },
+          {
+            label: "福鼎市",
+            value: "福鼎市",
+          },
+        ],
+      },
+    ],
+  },
+  {
     label: "北京",
     value: "北京",
     children: [
@@ -4933,406 +5334,7 @@ export const childrenJson = [
       },
     ],
   },
-  {
-    label: "福建省",
-    value: "福建省",
-    children: [
-      {
-        label: "福州市",
-        value: "福州市",
-        children: [
-          {
-            label: "鼓楼区",
-            value: "鼓楼区",
-          },
-          {
-            label: "台江区",
-            value: "台江区",
-          },
-          {
-            label: "仓山区",
-            value: "仓山区",
-          },
-          {
-            label: "马尾区",
-            value: "马尾区",
-          },
-          {
-            label: "晋安区",
-            value: "晋安区",
-          },
-          {
-            label: "长乐区",
-            value: "长乐区",
-          },
-          {
-            label: "闽侯县",
-            value: "闽侯县",
-          },
-          {
-            label: "连江县",
-            value: "连江县",
-          },
-          {
-            label: "罗源县",
-            value: "罗源县",
-          },
-          {
-            label: "闽清县",
-            value: "闽清县",
-          },
-          {
-            label: "永泰县",
-            value: "永泰县",
-          },
-          {
-            label: "平潭县",
-            value: "平潭县",
-          },
-          {
-            label: "福清市",
-            value: "福清市",
-          },
-        ],
-      },
-      {
-        label: "厦门市",
-        value: "厦门市",
-        children: [
-          {
-            label: "思明区",
-            value: "思明区",
-          },
-          {
-            label: "海沧区",
-            value: "海沧区",
-          },
-          {
-            label: "湖里区",
-            value: "湖里区",
-          },
-          {
-            label: "集美区",
-            value: "集美区",
-          },
-          {
-            label: "同安区",
-            value: "同安区",
-          },
-          {
-            label: "翔安区",
-            value: "翔安区",
-          },
-        ],
-      },
-      {
-        label: "莆田市",
-        value: "莆田市",
-        children: [
-          {
-            label: "城厢区",
-            value: "城厢区",
-          },
-          {
-            label: "涵江区",
-            value: "涵江区",
-          },
-          {
-            label: "荔城区",
-            value: "荔城区",
-          },
-          {
-            label: "秀屿区",
-            value: "秀屿区",
-          },
-          {
-            label: "仙游县",
-            value: "仙游县",
-          },
-        ],
-      },
-      {
-        label: "三明市",
-        value: "三明市",
-        children: [
-          {
-            label: "梅列区",
-            value: "梅列区",
-          },
-          {
-            label: "三元区",
-            value: "三元区",
-          },
-          {
-            label: "明溪县",
-            value: "明溪县",
-          },
-          {
-            label: "清流县",
-            value: "清流县",
-          },
-          {
-            label: "宁化县",
-            value: "宁化县",
-          },
-          {
-            label: "大田县",
-            value: "大田县",
-          },
-          {
-            label: "尤溪县",
-            value: "尤溪县",
-          },
-          {
-            label: "沙县",
-            value: "沙县",
-          },
-          {
-            label: "将乐县",
-            value: "将乐县",
-          },
-          {
-            label: "泰宁县",
-            value: "泰宁县",
-          },
-          {
-            label: "建宁县",
-            value: "建宁县",
-          },
-          {
-            label: "永安市",
-            value: "永安市",
-          },
-        ],
-      },
-      {
-        label: "泉州市",
-        value: "泉州市",
-        children: [
-          {
-            label: "鲤城区",
-            value: "鲤城区",
-          },
-          {
-            label: "丰泽区",
-            value: "丰泽区",
-          },
-          {
-            label: "洛江区",
-            value: "洛江区",
-          },
-          {
-            label: "泉港区",
-            value: "泉港区",
-          },
-          {
-            label: "惠安县",
-            value: "惠安县",
-          },
-          {
-            label: "安溪县",
-            value: "安溪县",
-          },
-          {
-            label: "永春县",
-            value: "永春县",
-          },
-          {
-            label: "德化县",
-            value: "德化县",
-          },
-          {
-            label: "金门县",
-            value: "金门县",
-          },
-          {
-            label: "石狮市",
-            value: "石狮市",
-          },
-          {
-            label: "晋江市",
-            value: "晋江市",
-          },
-          {
-            label: "南安市",
-            value: "南安市",
-          },
-        ],
-      },
-      {
-        label: "漳州市",
-        value: "漳州市",
-        children: [
-          {
-            label: "芗城区",
-            value: "芗城区",
-          },
-          {
-            label: "龙文区",
-            value: "龙文区",
-          },
-          {
-            label: "云霄县",
-            value: "云霄县",
-          },
-          {
-            label: "漳浦县",
-            value: "漳浦县",
-          },
-          {
-            label: "诏安县",
-            value: "诏安县",
-          },
-          {
-            label: "长泰县",
-            value: "长泰县",
-          },
-          {
-            label: "东山县",
-            value: "东山县",
-          },
-          {
-            label: "南靖县",
-            value: "南靖县",
-          },
-          {
-            label: "平和县",
-            value: "平和县",
-          },
-          {
-            label: "华安县",
-            value: "华安县",
-          },
-          {
-            label: "龙海市",
-            value: "龙海市",
-          },
-        ],
-      },
-      {
-        label: "南平市",
-        value: "南平市",
-        children: [
-          {
-            label: "延平区",
-            value: "延平区",
-          },
-          {
-            label: "建阳区",
-            value: "建阳区",
-          },
-          {
-            label: "顺昌县",
-            value: "顺昌县",
-          },
-          {
-            label: "浦城县",
-            value: "浦城县",
-          },
-          {
-            label: "光泽县",
-            value: "光泽县",
-          },
-          {
-            label: "松溪县",
-            value: "松溪县",
-          },
-          {
-            label: "政和县",
-            value: "政和县",
-          },
-          {
-            label: "邵武市",
-            value: "邵武市",
-          },
-          {
-            label: "武夷山市",
-            value: "武夷山市",
-          },
-          {
-            label: "建瓯市",
-            value: "建瓯市",
-          },
-        ],
-      },
-      {
-        label: "龙岩市",
-        value: "龙岩市",
-        children: [
-          {
-            label: "新罗区",
-            value: "新罗区",
-          },
-          {
-            label: "长汀县",
-            value: "长汀县",
-          },
-          {
-            label: "永定区",
-            value: "永定区",
-          },
-          {
-            label: "上杭县",
-            value: "上杭县",
-          },
-          {
-            label: "武平县",
-            value: "武平县",
-          },
-          {
-            label: "连城县",
-            value: "连城县",
-          },
-          {
-            label: "漳平市",
-            value: "漳平市",
-          },
-        ],
-      },
-      {
-        label: "宁德市",
-        value: "宁德市",
-        children: [
-          {
-            label: "蕉城区",
-            value: "蕉城区",
-          },
-          {
-            label: "霞浦县",
-            value: "霞浦县",
-          },
-          {
-            label: "古田县",
-            value: "古田县",
-          },
-          {
-            label: "屏南县",
-            value: "屏南县",
-          },
-          {
-            label: "寿宁县",
-            value: "寿宁县",
-          },
-          {
-            label: "周宁县",
-            value: "周宁县",
-          },
-          {
-            label: "柘荣县",
-            value: "柘荣县",
-          },
-          {
-            label: "福安市",
-            value: "福安市",
-          },
-          {
-            label: "福鼎市",
-            value: "福鼎市",
-          },
-        ],
-      },
-    ],
-  },
+
   {
     label: "江西省",
     value: "江西省",
