@@ -29,7 +29,7 @@ export class AuthService {
     //  比对验证码
     const smsCheck = await this.checkSmsCode('smsCode_register_' + phone, code as string);
     if (!smsCheck.status) return smsCheck;
-
+    delete createUserDto.code;
     try {
       const hashedPassword = await bcrypt.hash(password, this.SALT_ROUNDS);
       const res = await this.pgService.user.create({
@@ -50,10 +50,11 @@ export class AuthService {
   async checkSmsCode(smskey: string, code: string) {
     try {
       const cacheCode = await this.cacheManager.get(smskey);
+      console.log(`cacheCode---`, cacheCode);
       if (!cacheCode) {
         return { status: false, code: 400, message: '验证码已过期, 请重新获取!' };
       }
-      if (cacheCode !== code) {
+      if (cacheCode != code) {
         return { status: false, code: 400, message: '验证码错误, 请重新输入!' };
       }
       await this.cacheManager.del(smskey);

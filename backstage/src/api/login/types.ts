@@ -83,6 +83,7 @@ export interface UserRegisterType {
   username: string
   password: string
   phone: string
+  code: string
 }
 
 interface Role {

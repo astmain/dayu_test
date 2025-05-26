@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "scripts": {
     "back_api": "pnpm    --filter back_api      dev",
-    "backstage": "pnpm   --filter backstage      dev",
     "react_3d": "pnpm    --filter react_3d      dev",
+    "backstage": "pnpm   --filter backstage      dev",
+
     "pnpm操作": "pnpm操作==========================================================",
     "pnpm清除缓存": "pnpm store prune",
     "pnpm安装": "pnpm i",

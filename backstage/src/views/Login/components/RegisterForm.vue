@@ -258,8 +258,8 @@ const loginRegister = async () => {
         const formData = await getFormData()
         console.log('xzz2021: loginRegister -> formData', formData)
         loading.value = true
-        const { password, phone, username } = formData
-        const res = await registerApi({ password, phone, username })
+        const { password, phone, username, code } = formData
+        const res = await registerApi({ password, phone, username, code })
         const id = res?.data?.phone
         if (id) {
           ElMessage.success('注册成功, 欢迎登陆!')
