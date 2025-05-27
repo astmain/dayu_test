@@ -21,7 +21,17 @@ export class user_address_Controller {
         console.log('form', form);
         console.log('req', req.user.id);
         if (form.id) {
-            console.log(`1有id---更新地址`);
+            await this.pgService.addressInfo.update({
+                where:{id:   form.id},
+                data: {
+                    address_tag: form.address_tag,
+                    name: form.name,
+                    phone: form.phone,
+                    userId: req.user.id,
+                    street: form.street,
+                    region: form.region,
+                },
+            });
         } else {
             await this.pgService.addressInfo.create({
                 data: {
@@ -34,8 +44,6 @@ export class user_address_Controller {
                 },
             });
             console.log(`2没id---创建地址`);
-
-
         }
 
         return {code: 200, count: 1, message: '成功:保存地址'};
@@ -43,9 +51,10 @@ export class user_address_Controller {
 
     @Post('delete')
     @ApiOperation({summary: '删除地址'})
-    delete(@Body() form: user_address_DTO.del) {
-        console.log('111', form);
-        return {code: 200, count: 11, message: '111'};
+    async delete(@Body() form: user_address_DTO.del) {
+        console.log('form', form);
+        let one = await this.pgService.addressInfo.delete({where: {id: form.id}});
+        return {code: 200, data: one, message: '成功:删除地址'};
     }
 
     @Get('list')
