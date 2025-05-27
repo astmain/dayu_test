@@ -1,32 +1,25 @@
 import { Cascader, CascaderProps } from "antd"
 
-import { getAddressListApi } from "@/network/api/address"
 
-// import { childrenJson } from "./area"
+
+import { childrenJson } from "./area"
 
 const SelectXzz: React.FC = () => {
   const { SHOW_CHILD } = Cascader
 
-  interface Option2 {
-    id: number
-    name: string
-    children?: Option2[]
-    parent_id: number
+  interface Option {
+    label: string
+    value: string
+    children?: Option[]
   }
   const { formData, setFormData } = useConsigneeStore((state) => state)
-  const [childrenJson, setChildrenJson] = useState<Option2[]>([])
-  const onChange: CascaderProps<Option2>["onChange"] = (
-    value: (string | number | Option2[])[],
-    _selectedOptions: Option2[],
+  // const [childrenJson, setChildrenJson] = useState<Option2[]>([])
+  const onChange: CascaderProps<Option>["onChange"] = (
+    value: (string | number | Option[])[],
+    _selectedOptions: Option[],
   ) => {
     setFormData({ region: value as number[] })
   }
-
-  useEffect(() => {
-    getAddressListApi().then((res) => {
-      res?.data && setChildrenJson(res.data)
-    })
-  }, [])
 
   return (
     <>
@@ -35,12 +28,13 @@ const SelectXzz: React.FC = () => {
         options={childrenJson}
         onChange={onChange}
         showCheckedStrategy={SHOW_CHILD}
-        displayRender={(label) => label.join("")}
+        displayRender={(label) => label.join("/")}
         multiple={false}
         popupClassName="custom-cascader-menu"
         allowClear={false}
-        value={formData.region}
-        fieldNames={{ label: "name", value: "id", children: "children" }}
+        // value={formData.region}
+        expandTrigger="click"
+        fieldNames={{ label: "label", value: "value", children: "children" }}
       />
     </>
   )

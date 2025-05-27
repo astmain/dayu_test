@@ -5,6 +5,7 @@ import { CreateDepartmentDto, DeleteDepartmentDto, ListParamsDto, UpdateDepartme
 import { TransformKeyPipe } from 'src/processor/pipe/validater';
 import { IQueryParams } from '@/processor/utils/queryBuilder';
 import { Public } from '@/processor/decorator/public';
+import {OutputDto} from "@/table/department/dto/output.dto";
 // import { Action } from '@/processor/enum/action';
 // import { RequiredPermission } from '@/processor/decorator/permission';
 

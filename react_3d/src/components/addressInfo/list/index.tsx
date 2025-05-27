@@ -54,6 +54,7 @@ const ListLqh = () => {
   // 新增地址列表
   const updateAddressList = () => {
     getAddressApi().then((res) => {
+      console.log(`111---res:`,     res        )
       const data = res?.data?.map((item: any) => {
         const region = extractRegionId(item.region[0], "id")
         const regionTitle = extractRegionId(item.region[0], "name")
@@ -78,6 +79,7 @@ const ListLqh = () => {
   }
 
   const deleteAddress = async (id: number) => {
+
     const res = await deleteAddressApi({ id })
     if (res.code == 200) {
       message.success("删除成功")

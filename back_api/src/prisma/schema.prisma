@@ -671,17 +671,17 @@ model DeliveryInfo {
 
 //  地址
 model AddressInfo {
-  id         Int      @id @default(autoincrement())
-  userId     Int      @map("user_id")
-  user       User     @relation(fields: [userId], references: [id])
-  name       String   @db.VarChar(50)
-  phone      String   @db.VarChar(11)
-  region     Json?    @default("[]")
-  address    String   @db.VarChar(255)
-  tag        String   @db.VarChar(50)
-  is_default Boolean  @default(false)
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  user        User     @relation(fields: [userId], references: [id])
+  name        String   @db.VarChar(50)
+  address_tag String   @db.VarChar(50)
+  phone       String   @db.VarChar(11)
+  region      Json?    @default("[]")
+  street      String   @db.VarChar(255)
+  is_default  Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("address_infos")
 }

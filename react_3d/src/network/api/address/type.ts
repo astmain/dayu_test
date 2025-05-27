@@ -1,5 +1,6 @@
 interface BaseAddressData {
-  address_type: string
+  id ?: number,
+  address_tag: string
   name: string
   phone: string
   street: string
@@ -43,7 +44,7 @@ export interface RegionType {
 
 export interface CreateAddressRes {
   id: number
-  address_type: string
+  address_tag: string
   name: string
   phone: string
   region: RegionType[]
@@ -51,9 +52,11 @@ export interface CreateAddressRes {
 }
 
 export interface UpdateAddressRes {
-  address_type: string
+  address_tag: string
+  region: string[]
   name: string
   phone: string
+  street:string
 }
 
 export interface DeleteAddressRes {

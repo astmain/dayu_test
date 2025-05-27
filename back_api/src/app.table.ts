@@ -7,7 +7,7 @@ import { RoleModule } from '@/table/role/role.module';
 import { UserModule } from '@/table/user/user.module';
 import { MaterialModule } from '@/table/material/material.module';
 import { FileinfoModule } from '@/table/fileinfo/fileinfo.module';
-import { AddressModule } from '@/table/address/address.module';
+import { user_address_Module } from '@/table/address/user_address_Module';
 
 export const TABLE_MODULE = [
   DepartmentModule,
@@ -19,5 +19,5 @@ export const TABLE_MODULE = [
   UserModule,
   MaterialModule,
   FileinfoModule,
-  AddressModule,
+  user_address_Module,
 ];
