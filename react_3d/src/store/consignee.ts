@@ -18,7 +18,7 @@ interface ConsigneeStore {
 }
 
 const initialStatus: CreateAddressData = {
-  address_type: "company",
+  address_tag: "company",
   name: "",
   phone: "",
   street: "",

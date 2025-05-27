@@ -56,11 +56,9 @@ const ListLqh = () => {
     getAddressApi().then((res) => {
       console.log(`111---res:`,     res        )
       const data = res?.data?.map((item: any) => {
-        const region = extractRegionId(item.region[0], "id")
         const regionTitle = extractRegionId(item.region[0], "name")
         return {
           ...item,
-          region,
           regionTitle,
           tag: item.address_type,
         }
@@ -74,6 +72,7 @@ const ListLqh = () => {
   }, [])
 
   const openUpdateModal = (item: any) => {
+    console.log(`111---222:`,     item        )
     openEditModal(item)
     setIsUpdate(true)
   }
@@ -96,6 +95,7 @@ const ListLqh = () => {
   }
 
   const gengrateDataList = (data: DataListType[]) => {
+    console.log(`data---data11111111111:`,     data        )
     return data.map((item) => {
       const detailAddress = (
         <div className="flex  items-center justify-center">
