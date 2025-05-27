@@ -48,10 +48,10 @@ export class user_address_Controller {
 
     @Post('delete')
     @ApiOperation({summary: '删除地址'})
-    async delete(@Body() form: user_address_DTO.del, @Req() {user}: any) {
+    async delete(@Body() form: user_address_DTO.del, @Req() req: any) {
 
         console.log('form', form);
-        console.log('user', user);
+        console.log('user', req.user);
         const one = await this.pgService.addressInfo.delete({where: {id: form.id}});
         return {code: 200, data: one, message: '成功:删除地址'};
     }
@@ -60,11 +60,11 @@ export class user_address_Controller {
 
     @Post('default')
     @ApiOperation({summary: '设置默认地址'})
-   async default(@Body() body: user_address_DTO.set_default , @Req() {user}: any) {
+   async default(@Body() body: user_address_DTO.set_default , @Req() req: any) {
         console.log(`111---body:`, body);
-        console.log(`111---user:`, user);
+        console.log(`111---user:`, req.user);
         // 先设置全部当前用户的默认地址为false
-        await this.pgService.addressInfo.updateMany({where: {userId: user.id}, data: {is_default: false},});
+        await this.pgService.addressInfo.updateMany({where: {userId: req.user.id}, data: {is_default: false},});
         //  再设置当前地址为默认地址
        await this.pgService.addressInfo.update({where: {id: body.id}, data: {is_default: true},});
         return {code: 200, count: 11, aaaas: 111, aaa: 111, message: '111'};
@@ -75,8 +75,6 @@ export class user_address_Controller {
     async findBy(@Req() req: any) {
         console.log('req.user', req.user.id);
         const list = await this.pgService.addressInfo.findMany({where: {userId: req.user.id}});
-        // return {code: 200, message: '成功:获取地址列表',   count: list.length, list};
-        // return {code: 200, message: '成功:获取地址列表', data:  {count: list.length, list},};
         return {code: 200, message: '成功:获取地址列表', data: list};
     }
 

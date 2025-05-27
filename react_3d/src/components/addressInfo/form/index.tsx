@@ -47,11 +47,10 @@ const AddressFormXzz: React.FC<{ updateAddressList: () => void }> = ({updateAddr
         const submitData = isUpdate
             // ? { street, name, phone, address_tag: tag_value, region, id: (formData as UpdateAddressData).id,}
             ? {street, name, phone, address_tag: tag_value, region, id: (formData as UpdateAddressData).id,}
-            : {street, name, phone, address_tag: tag_value, region,id: 0}
-        // request(submitData)
-
-
+            : {street, name, phone, address_tag: tag_value, region, id: 0}
         await updateAddressApi(submitData)
+        await updateAddressList()
+        await closeEditModal()
 
 
     }
@@ -131,7 +130,7 @@ const AddressFormXzz: React.FC<{ updateAddressList: () => void }> = ({updateAddr
                             />
                             {/*{JSON.stringify(formData)}*/}
 
-                        {/*    home
+                            {/*    home
                         company
 
                         */}

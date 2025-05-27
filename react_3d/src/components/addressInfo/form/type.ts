@@ -10,7 +10,7 @@ export interface AddressFormData {
 export interface DataListType {
   id: number
   name: string
-  address_type: string
+  address_tag: string
   region: string[]
   street: string
   phone: string

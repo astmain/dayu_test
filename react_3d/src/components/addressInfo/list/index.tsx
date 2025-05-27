@@ -99,7 +99,7 @@ const ListLqh = () => {
     return data.map((item) => {
       const detailAddress = (
         <div className="flex  items-center justify-center">
-          <Tag color={item?.address_type == "company" ? "#F05113" : "#1366F0"}>{item?.address_type}</Tag>
+          <Tag color={item?.address_tag == "company" ? "#F05113" : "#1366F0"}>{item?.address_tag}</Tag>
           <div
             className="street"
             style={{
