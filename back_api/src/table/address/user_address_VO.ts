@@ -8,6 +8,4 @@ export class list {
 
   @Exclude()
   name: string;
-
-
 }
