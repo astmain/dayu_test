@@ -1,8 +1,9 @@
 export interface AddressFormData {
+  address_tag: string
   name: string
   phone: string
   street: string
-  region: number[]
+  region: string[]
   tag: { label: string; value: string }
 }
 

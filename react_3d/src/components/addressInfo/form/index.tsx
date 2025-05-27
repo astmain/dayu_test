@@ -41,8 +41,8 @@ const AddressFormXzz: React.FC<{ updateAddressList: () => void }> = ({updateAddr
 
     const onFinish = async (formdata: AddressFormData) => {
         console.log(`111---222:`, 333)
-        const {region, street, name, phone, tag} = formdata
-        const tag_value = typeof tag === "string" ? tag : tag.value
+        const {region, street, name, phone, address_tag} = formdata
+        const tag_value = typeof address_tag === "string" ? address_tag : address_tag
         // const region_id = region[region.length - 1]
         const submitData = isUpdate
             // ? { street, name, phone, address_tag: tag_value, region, id: (formData as UpdateAddressData).id,}
@@ -117,14 +117,26 @@ const AddressFormXzz: React.FC<{ updateAddressList: () => void }> = ({updateAddr
                         >
                             <Input style={{height: "56px", width: "576px"}}/>
                         </Form.Item>
-                        <Form.Item name="tag" label="添加标签" rules={[{required: true}]}>
+                        <Form.Item name="address_tag" label="添加标签" rules={[{required: true}]}>
                             <Radio.Group
                                 options={tagOptions}
                                 // onChange={onTagChange}
                                 optionType="button"
                                 buttonStyle="solid"
-                                // value={form.getFieldValue("tag")} // 让 Radio.Group 受控
+                                // value={form.getFieldValue("address_tag")} // 让 Radio.Group 受控
+                                value={formData.address_tag} // 让 Radio.Group 受控
+                                // defaultValue={formData.address_tag}
+                                // defaultValue={formData.address_tag}
+
                             />
+                            {/*{JSON.stringify(formData)}*/}
+
+                        {/*    home
+                        company
+
+                        */}
+
+
                         </Form.Item>
                         {/* <Form.Item name="is_default" label="是否默认" rules={[{ required: true }]}>
               <Switch
