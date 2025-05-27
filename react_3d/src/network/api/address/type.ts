@@ -4,7 +4,7 @@ interface BaseAddressData {
   name: string
   phone: string
   street: string
-  region?: number[]
+  region?: string[]
   region_id?: number
 }
 
