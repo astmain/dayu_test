@@ -95,7 +95,7 @@ const ListLqh = () => {
   }
 
   const gengrateDataList = (data: DataListType[]) => {
-    console.log(`data---data11111111111:`,     data        )
+    console.error(`data---data11111111111:`,     data        )
     return data.map((item) => {
       const detailAddress = (
         <div className="flex  items-center justify-center">
