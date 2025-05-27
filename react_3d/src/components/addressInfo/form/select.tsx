@@ -18,7 +18,7 @@ const SelectXzz: React.FC = () => {
     value: (string | number | Option[])[],
     _selectedOptions: Option[],
   ) => {
-    setFormData({ region: value as number[] })
+    setFormData({ region: value as string[] })
   }
 
   return (
@@ -32,7 +32,7 @@ const SelectXzz: React.FC = () => {
         multiple={false}
         popupClassName="custom-cascader-menu"
         allowClear={false}
-        // value={formData.region}
+        value={formData.region}
         expandTrigger="click"
         fieldNames={{ label: "label", value: "value", children: "children" }}
       />
